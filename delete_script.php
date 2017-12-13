@@ -18,20 +18,11 @@ while (true) {
     break;
 }
 
-
 function softDeleteByKeyword($keyword, $db)
 {
-    // select all entries that match keyword search
-    // $sql = "SELECT * FROM `TestProducts` WHERE `name` LIKE ? OR `description` LIKE ? OR `tags` LIKE ?";
-    // $query = $db->prepare($sql);
-    // $query->bind_param('sss', $keyword, $keyword, $keyword);
-    // $query->execute();
-
     echo "Searching for entries that match " . $keyword . "...\n";
     $results = [];
     $searchTerm = '%' . $keyword . '%';
-
-    // $sql = "SELECT `id`,`name`,`tags`,`description`,`price` FROM `TestProducts` WHERE `name` LIKE ? OR `description` LIKE ? OR `tags` LIKE ? AND `isDeleted` = 0";
     $sql = "
         SELECT 
             sub.`id`, 
@@ -74,7 +65,6 @@ function softDeleteByKeyword($keyword, $db)
     echo "\n";
     echo "Are you sure you want to delete these items?\n";
     echo "php $> ";
-    // have user confirm that selection is acceptable to delete
     $input = fopen("php://stdin", "r");
     $confirmation = trim(fgets($input));
 
@@ -91,11 +81,6 @@ function softDeleteByKeyword($keyword, $db)
             UPDATE `TestProducts` 
             SET `isDeleted` = 1 
             WHERE `id` IN (" . $deletedIDs . ")";
-        // $sql = "
-        //     SELECT *
-        //     FROM `TestProducts`
-        //     WHERE `id`
-        //     IN (" . $deletedIDs . ");";
         $db->query($sql);
         echo "Done. Items deleted.\n";
     }
@@ -103,21 +88,4 @@ function softDeleteByKeyword($keyword, $db)
     {
         echo "Cancelling...\n";
     }
-    // delete selection
 }
-
-
-
-
-// function softDeleteByPhrase($phrase)
-// {
-//     $sql = "UPDATE `TestProducts` SET isDeleted = 1 WHERE id = ?";
-//     $query = $this->dbconn->prepare($sql);
-//     $query->bind_param('i', $requestedID);
-//     $query->execute();
-//     return [ "result" => "success" ];
-// }
-
-// SELECT * FROM `TestProducts` WHERE `name` LIKE ? OR `description` LIKE ? OR `tags` LIKE ?;
-// UPDATE `TestProducts` SET `isDeleted` = 1 WHERE `name` LIKE ? OR `description` LIKE ? OR `tags` LIKE ?;
-
